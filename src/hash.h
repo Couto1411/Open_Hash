@@ -16,6 +16,7 @@ struct Table {
     Entry** table;
 	int tamanho;
 	int quantidade;
+	int collisions;
 };
 
 void printHash(Table* t);

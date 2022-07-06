@@ -7,6 +7,7 @@ Table* criaHash(int tam){
         return NULL;
     }
     t->quantidade = 0;
+	t->collisions =0;
     t->tamanho = proxPrimo(2*tam);
     t->table = (Entry**)calloc(t->tamanho, sizeof(Entry*));
     return t;
@@ -16,17 +17,18 @@ void insertHash(Table* t, int valor){
 	int achou=0;
 	int index = valor % t->tamanho;
 	if (t->table[index] != NULL){
-		if (t->table[index]->key== index)
-			index = (valor*index+t->tamanho)%t->tamanho;
+		index = (valor*index+t->tamanho)%t->tamanho;
 		while (t->table[index]!=NULL&&achou<2){
 			index++;
 			if (index>=t->tamanho){
 				index=0;
 				achou+=1;
 			}
+			t->collisions+=1;
 		}
+		t->collisions+=1;
 	}
-	if ((float)t->quantidade / t->tamanho > 1){
+	if ((float)t->quantidade / t->tamanho >= 1){
 		t->tamanho=proxPrimo(2*t->tamanho);
 		t->table=(Entry**)realloc(t->table, (t->tamanho)*sizeof(Entry*));
 		insertHash(t,valor);
@@ -40,7 +42,7 @@ void insertHash(Table* t, int valor){
 }
 
 void removeHash(Table* t, int valor){
-	int achou=0;
+	int achou=0,diminui=0;
 	int index = valor % t->tamanho;
 	if (t->table[index] != NULL && t->table[index]->value==valor){
 		free(t->table[index]);
@@ -49,17 +51,20 @@ void removeHash(Table* t, int valor){
 	}
 	else{
 		index = (valor*index+t->tamanho)%t->tamanho;
-		while (t->table[index]==NULL||t->table[index]->value!=valor||achou<2){
+		while ((t->table[index]==NULL||t->table[index]->value!=valor)&&achou<2){
 			index++;
 			if (index>=t->tamanho){
 				index=0;
 				achou+=1;
 			}
+			diminui+=1;
 		}
+		diminui+=1;
 		if (achou<2){
 			free(t->table[index]);
 			t->table[index]=NULL;
 			t->quantidade--;
+			t->collisions=t->collisions-diminui;
 		}
 	}
 }
@@ -71,7 +76,7 @@ Entry* searchHash(Table* t, int valor){
 		return t->table[index];
 	else{
 		index = (valor*index+t->tamanho)%t->tamanho;
-		while (t->table[index]==NULL||t->table[index]->value!=valor||achou<2){
+		while ((t->table[index]==NULL||t->table[index]->value!=valor)&&achou<2){
 			index++;
 			if (index>=t->tamanho){
 				index=0;
@@ -85,11 +90,13 @@ Entry* searchHash(Table* t, int valor){
 }
 
 void printHash(Table* t){
+	printf("Hash de tamanho: %d\n",t->tamanho);
 	for (int i = 0; i < t->tamanho; i++)
 	{
 		if (t->table[i]!=NULL)
 			printf("%d: %d\n",i,t->table[i]->value);
 	}
+	printf("Houveram %d colisoes.\n", t->collisions);
 }
 
 bool ePrimo(int n){
