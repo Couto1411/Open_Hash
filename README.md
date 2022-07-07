@@ -42,6 +42,10 @@ Execução:
 	<img src="imgs/exec2.jpg"/> 
 </p>   
 
+# Conclusão
+
+Ao compararmos a estrutura a uma semelhante porém fechada, notamos que existem mais colisões na hora de inserção, porém, a busca é mais rápida já que sabemos exatamente o caminho que devemos percorrer para encontrar o valor, portanto o custo é linear. Ou seja, perde-se na inserção porém ganha-se na busca.
+
 # Compilação e Execução
 
 O programa possui um arquivo Makefile que realiza todo o procedimento de compilação e execução. Para tanto, temos as seguintes diretrizes de execução:
