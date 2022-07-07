@@ -21,7 +21,7 @@ int main(){
 	insertHash(tabela, 4560);
 	insertHash(tabela, 4561);
 	insertHash(tabela, 4562);
-	insertHash(tabela, 4563);
+	insertHash(tabela, 4551);
 	printHash(tabela);
 	return 0;
 }
