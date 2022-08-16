@@ -29,8 +29,21 @@ void insertHash(Table* t, int valor){
 		t->collisions+=1;
 	}
 	if ((float)t->quantidade / t->tamanho >= 1){
-		t->tamanho=proxPrimo(2*t->tamanho);
-		t->table=(Entry**)realloc(t->table, (t->tamanho)*sizeof(Entry*));
+		Table* nova = (Table*)malloc(sizeof(Table));
+		nova->quantidade = 0;
+		nova->collisions =t->collisions;
+		nova->tamanho = proxPrimo(2*t->tamanho);;
+		nova->table = (Entry**)calloc(nova->tamanho, sizeof(Entry*));
+		//t->table=(Entry**)realloc(t->table, (t->tamanho)*sizeof(Entry*));
+		for (int i = 0; i < t->tamanho; i++)
+		{
+			if (t->table[i]!=NULL)
+				insertHash(nova,t->table[i]->value);
+		}
+		t->table=nova->table;
+		t->quantidade=nova->quantidade;
+		t->collisions=nova->collisions;
+		t->tamanho=nova->tamanho;
 		insertHash(t,valor);
 	}
 	else{
