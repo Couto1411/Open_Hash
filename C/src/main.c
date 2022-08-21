@@ -18,7 +18,7 @@ int main(){
 		printf("Item nao existe na Hash\n");
 	insertHash(tabela, 4558);
 	insertHash(tabela, 4559);
-	insertHash(tabela, 4560);
+	insertHash(tabela, 4560);			
 	insertHash(tabela, 4561);
 	insertHash(tabela, 4562);
 	insertHash(tabela, 4551);
